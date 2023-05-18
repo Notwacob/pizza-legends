@@ -12,7 +12,7 @@ class Sprite {
         this.shadow = new Image();
         this.useShadow = config.useShadow || false;
         if (this.useShadow) {
-            this.shadow.src = "/images/characters/shadow.png";
+            this.shadow.src = "images/characters/shadow.png";
         }
         this.shadow.onload = () => {
             this.isShadowLoaded = true;
@@ -24,7 +24,7 @@ class Sprite {
                 [0,0]
             ]
         }
-        this.currentAnimation = config.currentAnimation || "idelDown";
+        this.currentAnimation = config.currentAnimation || "down";
         this.currentAnimationFrame = 0;
 
         //Reference the game object
