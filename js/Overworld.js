@@ -26,7 +26,7 @@ class Overworld {
             this.map.drawLowerImage(this.ctx, cameraPerson);
 
             //Draw Game Objects
-            Object.values(this.map.gameObjects).sort((a,b) => {
+            Object.values(this.map.gameObjects).sort((a, b) => {
                 return a.y - b.y;
             }).forEach(object => {
                 object.sprite.draw(this.ctx, cameraPerson);
@@ -42,9 +42,33 @@ class Overworld {
         step();
     }
 
-    init() {
-        this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
+    bindActionInput() {
+        new KeyPressListener("Enter", () => {
+            //Is there a person here to talk to?
+            this.map.checkForActionCutscene();
+        })
+    }
+
+    bindHeroPositionCheck() {
+        document.addEventListener("PersonWalkingComplete", e => {
+            if (e.detail.whoId === "hero") {
+                //Hero's position has changed
+                this.map.checkForFootstepCutscene()
+            }
+        })
+    }
+
+    startMap(mapConfig) {
+        this.map = new OverworldMap(mapConfig);
+        this.map.overworld = this;
         this.map.mountObjects();
+    }
+
+    init() {
+        this.startMap(window.OverworldMaps.DemoRoom);
+
+        this.bindActionInput();
+        this.bindHeroPositionCheck();
 
         this.directionInput = new DirectionInput();
         this.directionInput.init();
@@ -52,12 +76,16 @@ class Overworld {
 
         this.startGameLoop();
 
-        this.map.startCutscene([
-            { who: "hero", type: "walk",  direction: "down" },
-            { who: "hero", type: "walk",  direction: "down" },
-            { who: "npc1", type: "walk",  direction: "left" },
-            { who: "npc1", type: "walk",  direction: "left" },
-            { who: "npc1", type: "stand",  direction: "up", time: 800 },
-        ]);
+        // this.map.startCutscene([
+        //     { who: "hero", type: "walk",  direction: "down" },
+        //     { who: "hero", type: "walk",  direction: "down" },
+        //     { who: "npc1", type: "walk",  direction: "up" },
+        //     { who: "npc1", type: "walk",  direction: "left" },
+        //     { who: "hero", type: "stand",  direction: "right", time: 10 },
+        //     { type: "textMessage", text: "WHY HELLO THERE!"},
+        //     { type: "textMessage", text: "Sorry for yelling! Just wanted to get your attention."},
+        //     { type: "textMessage", text: "Be careful when venturing outside"},
+        //     //{ who: "npc1", type: "stand",  direction: "up", time: 800 },
+        // ]);
     }
 }

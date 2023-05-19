@@ -4,7 +4,7 @@ const utils = {
     },
 
     asGridCoord(x, y) {
-        return `${x*16},${y*16}`
+        return `${x * 16},${y * 16}`
     },
 
     nextPosition(initialX, initialY, direction) {
@@ -16,11 +16,18 @@ const utils = {
         } else if (direction === "right") {
             x += size;
         } else if (direction === "up") {
-            y -= size; 
+            y -= size;
         } else if (direction === "down") {
             y += size;
         }
-        return {x, y};
+        return { x, y };
+    },
+
+    oppositeDirection(direction) {
+        if (direction === "left") { return "right" }
+        if (direction === "right") { return "left" }
+        if (direction === "up") { return "down" }
+        return "up"
     },
 
     emitEvent(name, detail) {
@@ -28,5 +35,5 @@ const utils = {
             detail
         });
         document.dispatchEvent(event);
-    }
+    },
 }
